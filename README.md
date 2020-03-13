@@ -15,7 +15,7 @@ Install dependencies:
 
 The script uses `argparse` to parse command line arguments. Use the `--help` option to view the menu of how to use the `jira_issues.py` script:
 
-`python3 quality-dashboard/jira_issues.py --help`
+`python3 dashboard/jira_issues.py --help`
 
 You must pass in the following command line options to run the script properly:
 
@@ -27,4 +27,4 @@ You must pass in the following command line options to run the script properly:
 
 Here's an example of a valid command:
 
-`python3 quality-dashboard/jira_issues.py --project SEAM --sprint-start 2020-03-04 --sprint-end 2020-03-18`
+`python3 dashboard/jira_issues.py --project SEAM --sprint-start 2020-03-04 --sprint-end 2020-03-18`
