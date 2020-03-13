@@ -13,8 +13,8 @@ auth_jira = jira.JIRA(basic_auth=(JIRA_USERNAME, JIRA_PASSWORD), options={'serve
 def initialize_parser():
     parser = argparse.ArgumentParser(description='Setting parameters for your jira queries')
     parser.add_argument("--project", required=True, help="Specify the JIRA project")
-    parser.add_argument("--sprint-start", required=True, help="Date format YYYY-MM-DD of sprint start")
-    parser.add_argument("--sprint-end", required=True, help="Date format YYYY-MM-DD of sprint end")
+    parser.add_argument("--sprint-start", help="Date format YYYY-MM-DD of sprint start")
+    parser.add_argument("--sprint-end", help="Date format YYYY-MM-DD of sprint end")
     return parser
 
 def count_open_critical_major_issues(project):
@@ -72,15 +72,20 @@ def count_issues(jql):
 
 def collect_jira_data(args):
     project = args.project  # i.e. SEAM
-    sprint_start = args.sprint_start
-    sprint_end = args.sprint_end
 
     print("Open Issues: {0}".format(count_open_issues(project)))
     print("Open Critical Major Issues: {0}".format(count_open_critical_major_issues(project)))
     print("Open Regression Issues: {0}".format(count_open_regression_issues(project)))
     print("Open Data Issues: {0}".format(count_open_data_issues(project)))
-    print("Open Issues This Sprint: {0}".format(count_opened_issues_in_sprint(project, sprint_start, sprint_end)))
-    print("Closed Issues This Sprint: {0}".format(count_closed_issues_in_sprint(project, sprint_start, sprint_end)))
+
+    if args.sprint_start and args.sprint_end:
+        sprint_start = args.sprint_start
+        sprint_end = args.sprint_end
+        print("Open Issues This Sprint: {0}".format(count_opened_issues_in_sprint(project, sprint_start, sprint_end)))
+        print("Closed Issues This Sprint: {0}".format(count_closed_issues_in_sprint(project, sprint_start, sprint_end)))
+    elif args.sprint_start or args.sprint_end:
+        print("\nYou have only selected one sprint date, but you must add a date range" \
+              "to see open and closed issues for the sprint. Use the --help option to learn more.\n")
 
 
 if __name__ == "__main__":
