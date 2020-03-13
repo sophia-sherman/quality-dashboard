@@ -15,7 +15,7 @@ def initialize_parser():
     parser.add_argument("--project", required=True, help="Specify the JIRA project")
     parser.add_argument("--sprint-start", help="Date format YYYY-MM-DD of sprint start")
     parser.add_argument("--sprint-end", help="Date format YYYY-MM-DD of sprint end")
-    parser.add_argument("--release-version", help="Release version format Major.Minor.Patch")
+    parser.add_argument("--release-version", help="Release version format major.minor.patch")
     return parser
 
 def count_open_critical_major_issues(project):

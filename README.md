@@ -2,6 +2,8 @@
 
 Display quality metrics, meant to replace filling this confluence page in by hand: https://confluence.cambiahealth.com/confluence/display/SEAM/Sprint+Quality+Metrics
 
+So far, only functionality to automate running jira queries has been implemented.
+
 ## Set up dev environment
 Add a `.env` file with the following environment variables:
 ```
@@ -17,14 +19,25 @@ The script uses `argparse` to parse command line arguments. Use the `--help` opt
 
 `python3 dashboard/jira_issues.py --help`
 
-You must pass in the following command line options to run the script properly:
+To minimally run the script, specify a jira project name:
+
+`python3 dashboard/jira_issues.py --project SEAM`
+
+Additional optional options:
 
 ```
---project <Jira project name>
---sprint_start <sprint start date format YYYY-MM-DD>
---sprint_end <sprint end date format YYYY-MM-DD>
+--sprint-start <sprint start date format YYYY-MM-DD>
+--sprint-end <sprint end date format YYYY-MM-DD>
+--release-version <release version format major.minor.patch>
 ```
 
-Here's an example of a valid command:
+Here are some example of valid commands:
 
 `python3 dashboard/jira_issues.py --project SEAM --sprint-start 2020-03-04 --sprint-end 2020-03-18`
+`python3 dashboard/jira_issues.py --project SEAM --sprint-start 2020-03-04 --sprint-end 2020-03-18 --release-version 1.7.0`
+
+## Run unit tests
+
+Make sure all unit tests pass before committing code:
+
+`pytest`
