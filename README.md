@@ -22,7 +22,7 @@ You must pass in the following command line options to run the script properly:
 ```
 --project <Jira project name>
 --sprint_start <sprint start date format YYYY-MM-DD>
---sprint_end <sprint  end date format YYYY-MM-DD>
+--sprint_end <sprint end date format YYYY-MM-DD>
 ```
 
 Here's an example of a valid command:
