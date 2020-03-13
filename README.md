@@ -33,8 +33,10 @@ Additional optional options:
 
 Here are some example of valid commands:
 
-`python3 dashboard/jira_issues.py --project SEAM --sprint-start 2020-03-04 --sprint-end 2020-03-18`
-`python3 dashboard/jira_issues.py --project SEAM --sprint-start 2020-03-04 --sprint-end 2020-03-18 --release-version 1.7.0`
+```
+python3 dashboard/jira_issues.py --project SEAM --sprint-start 2020-03-04 --sprint-end 2020-03-18
+python3 dashboard/jira_issues.py --project SEAM --sprint-start 2020-03-04 --sprint-end 2020-03-18 --release-version 1.7.0
+```
 
 ## Run unit tests
 
