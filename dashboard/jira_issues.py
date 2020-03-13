@@ -15,6 +15,7 @@ def initialize_parser():
     parser.add_argument("--project", required=True, help="Specify the JIRA project")
     parser.add_argument("--sprint-start", help="Date format YYYY-MM-DD of sprint start")
     parser.add_argument("--sprint-end", help="Date format YYYY-MM-DD of sprint end")
+    parser.add_argument("--release-version", help="Release version format Major.Minor.Patch")
     return parser
 
 def count_open_critical_major_issues(project):
@@ -65,6 +66,30 @@ def count_closed_issues_in_sprint(project, sprint_start, sprint_end):
         print(f"\nCheck your JQL syntax: {error}\n")
 
 
+def count_opened_issues_for_release(project, release_version):
+    try:
+        opened_issues_jql = f'project = {project} AND issuetype = Bug AND (resolution is EMPTY OR resolution != Duplicate) AND affectedVersion = {release_version}'
+        return count_issues(opened_issues_jql)
+    except jira.exceptions.JIRAError as error:
+        print(f"\nCheck your JQL syntax: {error}\n")
+
+
+def count_closed_issues_for_release(project, release_version):
+    try:
+        closed_issues_jql = f'project = {project} AND (resolution = EMPTY OR resolution != Duplicate) AND issuetype = Bug AND status = Closed AND affectedVersion = {release_version}'
+        return count_issues(closed_issues_jql)
+    except jira.exceptions.JIRAError as error:
+        print(f"\nCheck your JQL syntax: {error}\n")
+
+
+def count_open_issues_targeted_for_release(project, release_version):
+    try:
+        open_targeted_issues_jql = f'project = {project} AND issuetype = Bug AND (resolution = EMPTY OR resolution != Duplicate) AND status in (Backlog, "In Progress", "In Review", "In Product Review", Icebox) AND affectedVersion = {release_version}'
+        return count_issues(open_targeted_issues_jql)
+    except jira.exceptions.JIRAError as error:
+        print(f"\nCheck your JQL syntax: {error}\n")
+
+
 def count_issues(jql):
     issues = auth_jira.search_issues(jql, fields=['key'])
     return issues.total
@@ -81,11 +106,17 @@ def collect_jira_data(args):
     if args.sprint_start and args.sprint_end:
         sprint_start = args.sprint_start
         sprint_end = args.sprint_end
-        print("Open Issues This Sprint: {0}".format(count_opened_issues_in_sprint(project, sprint_start, sprint_end)))
-        print("Closed Issues This Sprint: {0}".format(count_closed_issues_in_sprint(project, sprint_start, sprint_end)))
+        print("Open Issues this Sprint ({0} - {1}): {2}".format(sprint_start, sprint_end, count_opened_issues_in_sprint(project, sprint_start, sprint_end)))
+        print("Closed Issues this Sprint ({0} - {1}): {2}".format(sprint_start, sprint_end, count_closed_issues_in_sprint(project, sprint_start, sprint_end)))
     elif args.sprint_start or args.sprint_end:
         print("\nYou have only selected one sprint date, but you must add a date range" \
               "to see open and closed issues for the sprint. Use the --help option to learn more.\n")
+
+    if args.release_version:
+        release_version = args.release_version
+        print("Created bugs pertaining to release {0}: {1}".format(release_version, count_opened_issues_for_release(project, release_version)))
+        print("Closed bugs pertaining to release {0}: {1}".format(release_version, count_closed_issues_for_release(project, release_version)))
+        print("Remaining open bugs targeted for release {0}: {1}".format(release_version, count_open_issues_targeted_for_release(project, release_version)))
 
 
 if __name__ == "__main__":
